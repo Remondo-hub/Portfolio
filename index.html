@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -277,16 +278,35 @@
         }
         .carousel-track:active { cursor: grabbing; }
         .carousel-slide {
-            flex: 0 0 100%;
+    
+          flex: 0 0 100%;
             position: relative;
-            aspect-ratio: 4 / 1.5;
+            aspect-ratio: auto;
+           
+            height: 450px;
             overflow: hidden;
             cursor: pointer;
         }
+.carousel-slide::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("images/motif-transparent.jpg");
+
+    background-repeat: repeat;
+    background-position: center;
+   /* background-size: 50px 50px;  /* Ajustez la taille du motif */
+    opacity: 0.25;  /* Transparence du motif SEULEMENT */
+    pointer-events: none;  /* Permet de cliquer à travers le motif */
+    z-index: -1;
+}
         .carousel-slide img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             transition: transform 0.4s ease;
         }
         .carousel-slide:hover img { transform: scale(1.03); }
@@ -1363,12 +1383,13 @@
     AOS.init({ duration: 700, once: true, offset: 80 });
     
     const activitiesData = [
-        { id: 0, imgUrl: "images/maintenance.png", icon: "fas fa-tools", title_fr: "MAINTENANCE", title_en: "MAINTENANCE", short_fr: "Dépannage, réparation, optimisation de systèmes informatiques", short_en: "Troubleshooting, repair, optimization of IT systems", desc_fr: "Intervention rapide sur pannes matérielles et logicielles, optimisation des performances, maintenance préventive et corrective pour infrastructures critiques.", desc_en: "Rapid intervention on hardware and software failures, performance optimization, preventive and corrective maintenance for critical infrastructures.", details_fr: "⏱️ Durée typique : 1 à 5 jours | 💰 Tarif : sur devis", details_en: "⏱️ Typical duration: 1-5 days | 💰 Price: on quote", tech: "PLC, SCADA, TIA Portal, Outils diagnostiques" },
-        { id: 1, imgUrl: "https://picsum.photos/id/102/1200/700", icon: "fas fa-code", title_fr: "PROGRAMMATION", title_en: "PROGRAMMING", short_fr: "Développement web, applications, scripts sur mesure", short_en: "Web development, applications, custom scripts", desc_fr: "Création d'applications métier, scripts d'automatisation, interfaces web interactives.", desc_en: "Creation of business applications, automation scripts, interactive web interfaces.", details_fr: "⏱️ Délai moyen : 2 à 8 semaines | 💰 Devis personnalisé", details_en: "⏱️ Average lead time: 2-8 weeks | 💰 Custom quote", tech: "Python, JavaScript, React, Node.js, SQL" },
-        { id: 2, imgUrl: "https://picsum.photos/id/103/1200/700", icon: "fas fa-chalkboard-user", title_fr: "FORMATEUR", title_en: "TRAINER", short_fr: "Formation en informatique, pédagogie, accompagnement", short_en: "IT training, pedagogy, coaching", desc_fr: "Sessions de formation sur mesure pour équipes ou particuliers : automatisme, programmation, instrumentation.", desc_en: "Tailored training sessions for teams or individuals: automation, programming, instrumentation.", details_fr: "📚 Modules : 1 à 3 jours | 🎯 Groupes jusqu'à 12 pers.", details_en: "📚 Modules: 1-3 days | 🎯 Groups up to 12 pers.", tech: "LMS, supports interactifs, ateliers pratiques" },
-        { id: 3, imgUrl: "https://picsum.photos/id/104/1200/700", icon: "fas fa-newspaper", title_fr: "INFO TECHNIQUE", title_en: "TECH INFO", short_fr: "Veille technologique, documentation, conseil", short_en: "Technology watch, documentation, consulting", desc_fr: "Veille active sur les nouvelles technologies industrielles, rédaction de documentations techniques.", desc_en: "Active technology watch on new industrial technologies, technical documentation writing.", details_fr: "📅 Veille mensuelle | 📑 Rédaction technique", details_en: "📅 Monthly watch | 📑 Technical writing", tech: "Outils de veille, Rédaction technique, Gestion documentaire" },
-        { id: 4, imgUrl: "https://picsum.photos/id/105/1200/700", icon: "fas fa-project-diagram", title_fr: "RÉALISATION PROJET", title_en: "PROJECT DELIVERY", short_fr: "Gestion de projet, livraison de solutions complètes", short_en: "Project management, end-to-end solution delivery", desc_fr: "Pilotage de projets techniques de la conception à la livraison.", desc_en: "Management of technical projects from design to delivery.", details_fr: "📆 Durée : selon complexité | 📊 Méthodologie agile", details_en: "📆 Duration: depending on complexity | 📊 Agile methodology", tech: "MS Project, Jira, Méthodes Agiles" }
-    ];
+     
+  { id: 0, imgUrl: "images/PARAMÉTRAGE INSTRUMENTATION_01.png", icon: "fas fa-microchip", title_fr: "PARAMÉTRAGE INSTRUMENTATION", title_en: "INSTRUMENTATION CONFIGURATION", short_fr: "Paramétrage des instruments de mesure industriels", short_en: "Industrial measurement instruments configuration", desc_fr: "Paramétrage Instrumentation HART. Configuration du transmetteur APC-2000-ALW via communicateur Emerson : configuration HART des valeurs LRV et URV, calculées à partir de la formule P= ρ × g × h", desc_en: "HART instrumentation configuration. APC-2000-ALW transmitter configuration via Emerson communicator: HART configuration of LRV and URV values, calculated using the formula P = ρ × g × h", details_fr: "🔧 HART · Communicateur Emerson · LRV/URV · P = ρ × g × h", details_en: "🔧 HART · Emerson communicator · LRV/URV · P = ρ × g × h", tech: "HART, Emerson Communicateur, APC-2000-ALW, Instrumentation" },
+  
+  { id: 1, imgUrl: "images/CALIBRATION_01.png", icon: "fas fa-chart-line", title_fr: "CALIBRATION", title_en: "CALIBRATION", short_fr: "Calibration d'un transmetteur micro-ondes inline", short_en: "Inline microwave transmitter calibration", desc_fr: "Calibration du transmetteur proMtec réalisée avec succès : les nouvelles valeurs présentent une excellente corrélation avec les résultats de laboratoire sur la mesure Brix inline.", desc_en: "Successful calibration of the proMtec transmitter: new values show excellent correlation with laboratory results for inline Brix measurement.", details_fr: "📊 Brix · Calibration · Transmetteur · Instrumentation", details_en: "📊 Brix · Calibration · Transmitter · Instrumentation", tech: "proMtec, Mesure Brix inline, Instrumentation, Calibration" },
+  
+  { id: 2, imgUrl: "images/DIAGNOSTIC AUTOMATISME_01.png", icon: "fas fa-tools", title_fr: "DIAGNOSTIC AUTOMATISME", title_en: "AUTOMATION DIAGNOSTIC", short_fr: "Diagnostic et correction de défauts sur machine de conditionnement", short_en: "Fault diagnosis and correction on packaging machine", desc_fr: "Suite à des défauts répétitifs sur une machine de conditionnement, un diagnostic approfondi a permis d'identifier et de corriger le réseau défaillant directement dans le programme TIA Portal V20.", desc_en: "Following repetitive faults on a packaging machine, an in-depth diagnosis identified and corrected the faulty network directly in the TIA Portal V20 program.", details_fr: "🔧 Automatisme · Diagnostic · TIA Portal · SIEMENS", details_en: "🔧 Automation · Diagnostic · TIA Portal · SIEMENS", tech: "TIA Portal V20, SIEMENS, Réseaux industriels, Automatisme" },
+       ];
 
     let currentLang = localStorage.getItem('lang') || 'fr';
     let currentIndex = 0;
