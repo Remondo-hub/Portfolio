@@ -43,6 +43,30 @@
         .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.65s cubic-bezier(.22,.68,0,1.2), transform 0.65s cubic-bezier(.22,.68,0,1.2); }
         .reveal.visible { opacity: 1; transform: none; }
 
+/* ═══════ ACTIVITES BACKGROUND PATTERN ═══════ */
+#activites {
+    position: relative;
+    overflow: hidden;
+}
+#activites::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('https://www.transparenttextures.com/patterns/circuit-board.png');
+    background-repeat: repeat;
+    background-size: 60px 60px;
+    opacity: 0.2;
+    pointer-events: none;
+    z-index: 0;
+}
+#activites .container {
+    position: relative;
+    z-index: 1;
+}
+        
         /* ═══════ HEADER ═══════ */
         .main-header {
             position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
@@ -630,7 +654,13 @@
                     downloadPDF(cvFiles.en);
                 });
             });
-
+// Fermer les sélecteurs en cliquant ailleurs (sauf si on clique sur les boutons ou leurs enfants)
+document.addEventListener('click', (event) => {
+    const isClickOnCvBtn = cvDownloadBtn && cvDownloadBtn.contains(event.target);
+    const isClickOnHeroBtn = heroDownloadBtn && heroDownloadBtn.contains(event.target);
+    const isClickOnSelector = (cvLangSelector && cvLangSelector.contains(event.target)) ||
+                              (heroCvLangSelector && heroCvLangSelector.contains(event.target));
+    
             // Fermer les sélecteurs en cliquant ailleurs
             document.addEventListener('click', () => {
                 if (cvLangSelector) cvLangSelector.classList.remove('show');
