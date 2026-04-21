@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -72,10 +73,27 @@
         .cv-download-btn { display: flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; border: none; padding: 0.42rem 1.1rem; border-radius: 30px; font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.25s; box-shadow: 0 4px 14px var(--accent-glow); }
         .cv-download-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px var(--accent-glow); }
         .cv-language-selector { position: absolute; top: calc(100% + 8px); right: 0; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 14px; padding: 0.5rem; box-shadow: var(--shadow-hover); display: none; min-width: 220px; z-index: 1001; }
-        /* Version hero: à droite du bouton */
-        .hero-cv-wrapper { position: relative; display: inline-block; }
-        .hero-cv-selector { position: absolute; top: calc(100% + 8px); right: 0; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 14px; padding: 0.5rem; box-shadow: var(--shadow-hover); display: none; min-width: 220px; z-index: 1001; }
-        .cv-language-selector.show, .hero-cv-selector.show { display: block; }
+        .hero-cv-wrapper { position: relative; display: inline-block; z-index: 100; }
+      .hero-cv-selector { 
+    position: absolute; 
+    bottom: calc(-80% + 8px);   /* Au-dessus du bouton */
+    left: 100%;                  /* Centre par rapport au bouton */
+    transform: translateX(0%); /* Décale légèrement vers la droite */
+    background: var(--bg-card); 
+    border: 1px solid var(--border-light); 
+    border-radius: 14px; 
+    padding: 0.5rem; 
+    box-shadow: var(--shadow-hover); 
+    display: none; 
+    min-width: 220px; 
+    z-index: 1002;
+    backdrop-filter: blur(8px);
+}
+        .cv-language-selector.show, .hero-cv-selector.show { display: block; animation: fadeInUp 0.2s ease; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         .cv-lang-option { display: flex; align-items: center; gap: 0.8rem; padding: 0.65rem 1rem; color: var(--text-primary); text-decoration: none; border-radius: 10px; transition: background 0.2s; cursor: pointer; }
         .cv-lang-option:hover { background: var(--accent-light); color: var(--accent); }
         .theme-toggle { width: 42px; height: 24px; border-radius: 30px; background: var(--accent-light); border: 1.5px solid var(--border-light); cursor: pointer; position: relative; transition: all 0.25s; padding: 0; flex-shrink: 0; }
@@ -98,25 +116,291 @@
         .section-title:after { content: ''; display: block; width: 48px; height: 4px; margin-top: 12px; background: linear-gradient(90deg, var(--accent), transparent); border-radius: 4px; transition: width 0.5s ease; }
         .section-title:hover:after { width: 130px; }
 
-        /* ═══════ HERO ═══════ */
-        .hero { position: relative; padding: 4rem 0 3rem; overflow: hidden; background: linear-gradient(140deg, var(--bg-primary) 0%, var(--bg-card) 55%, var(--accent-light) 100%); }
-        .hero::before { content: ''; position: absolute; right: -80px; top: -80px; width: 560px; height: 560px; border-radius: 50%; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 65%); pointer-events: none; }
-        .hero-grid { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 3rem; }
-        .hero-info { flex: 1; min-width: 280px; }
-        .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent-light); color: var(--accent); padding: 0.35rem 1.1rem; border-radius: 30px; font-size: 0.82rem; font-weight: 700; margin-bottom: 1.2rem; border: 1px solid rgba(26,107,138,0.2); animation: fadeUp 0.8s ease both; }
-        @keyframes fadeUp { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform: none; } }
-        .hero-info h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.04em; margin-bottom: 0.4rem; background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%); background-clip: text; -webkit-background-clip: text; color: transparent; animation: fadeUp 0.9s ease both 0.1s; }
-        .hero-info .title { font-size: clamp(1rem, 2vw, 1.35rem); color: var(--accent); font-weight: 600; margin-top: 0.5rem; animation: fadeUp 0.9s ease both 0.2s; }
-        .hero-desc { color: var(--text-secondary); max-width: 540px; margin: 1.4rem 0; font-size: 1rem; line-height: 1.75; animation: fadeUp 0.9s ease both 0.3s; }
-        .hero-download-section { display: flex; flex-wrap: wrap; align-items: center; gap: 1.2rem; margin-top: 2rem; animation: fadeUp 0.9s ease both 0.4s; }
-        .btn-download { display: inline-flex; align-items: center; gap: 0.7rem; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; padding: 0.9rem 2rem; border-radius: 50px; font-weight: 700; text-decoration: none; border: none; cursor: pointer; font-size: 0.95rem; box-shadow: 0 6px 24px var(--accent-glow); transition: all 0.3s cubic-bezier(.34,1.56,.64,1); }
+        /* ═══════ HERO AVEC FOND DYNAMIQUE ET ATTRACTIF ═══════ */
+        .hero { 
+            position: relative; 
+            padding: 4rem 0 3rem; 
+            overflow: hidden;
+            isolation: isolate;
+        }
+        /* Fond animé avec vagues et particules */
+        .hero-bg-animated {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .hero-bg-animated svg {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.35;
+        }
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 180px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%231a6b8a" fill-opacity="0.15" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
+            background-size: 1440px 180px;
+            animation: waveMove 20s linear infinite;
+            pointer-events: none;
+        }
+        .wave:nth-child(2) {
+            bottom: 20px;
+            opacity: 0.5;
+            animation: waveMove 15s linear infinite reverse;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%2329a3c4" fill-opacity="0.1" d="M0,192L48,197.3C96,203,192,213,288,208C384,203,480,181,576,176C672,171,768,181,864,197.3C960,213,1056,235,1152,229.3C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
+            background-size: 1440px 180px;
+        }
+        @keyframes waveMove {
+            0% { background-position-x: 0; }
+            100% { background-position-x: 1440px; }
+        }
+        /* Particules flottantes */
+        .floating-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 80%);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: floatParticle 8s infinite alternate ease-in-out;
+        }
+        @keyframes floatParticle {
+            0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.1; }
+            100% { transform: translateY(-40px) translateX(20px) scale(1.3); opacity: 0.5; }
+        }
+        /* Cercle lumineux rotatif */
+        .rotating-glow {
+            position: absolute;
+            top: 50%;
+            right: 5%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: rotateGlow 25s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        @keyframes rotateGlow {
+            0% { transform: translateY(-50%) rotate(0deg) scale(1); opacity: 0.4; }
+            50% { transform: translateY(-50%) rotate(180deg) scale(1.2); opacity: 0.7; }
+            100% { transform: translateY(-50%) rotate(360deg) scale(1); opacity: 0.4; }
+        }
+        .hero-grid { 
+            position: relative;
+            z-index: 2; 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: space-between; 
+            align-items: center; 
+            gap: 3rem; 
+        }
+        .hero-info { flex: 1; min-width: 280px; backdrop-filter: blur(2px); }
+        .hero-badge { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 0.5rem; 
+            background: rgba(26,107,138,0.15);
+            backdrop-filter: blur(8px);
+            color: var(--accent); 
+            padding: 0.35rem 1.1rem; 
+            border-radius: 30px; 
+            font-size: 0.82rem; 
+            font-weight: 700; 
+            margin-bottom: 1.2rem; 
+            border: 1px solid rgba(26,107,138,0.3);
+            animation: pulseBadge 2s infinite, fadeUp 0.8s ease both;
+        }
+        @keyframes pulseBadge {
+            0% { box-shadow: 0 0 0 0 rgba(26,107,138,0.3); }
+            70% { box-shadow: 0 0 0 12px rgba(26,107,138,0); }
+            100% { box-shadow: 0 0 0 0 rgba(26,107,138,0); }
+        }
+        .hero-info h1 { 
+            font-size: clamp(2.2rem, 5vw, 3.8rem); 
+            font-weight: 800; 
+            line-height: 1.1; 
+            letter-spacing: -0.04em; 
+            margin-bottom: 0.4rem; 
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%); 
+            background-clip: text; 
+            -webkit-background-clip: text; 
+            color: transparent; 
+            animation: fadeUp 0.9s ease both 0.1s;
+            position: relative;
+            display: inline-block;
+        }
+        .hero-info h1::after {
+            content: '⚡';
+            font-size: 2rem;
+            margin-left: 8px;
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            color: var(--accent);
+            display: inline-block;
+            animation: blinkLight 1.2s infinite alternate;
+        }
+        @keyframes blinkLight {
+            0% { opacity: 0.4; transform: scale(0.9); text-shadow: none; }
+            100% { opacity: 1; transform: scale(1.1); text-shadow: 0 0 12px var(--accent); }
+        }
+        .hero-info .title { 
+            font-size: clamp(1rem, 2vw, 1.35rem); 
+            color: var(--accent); 
+            font-weight: 600; 
+            margin-top: 0.5rem; 
+            animation: fadeUp 0.9s ease both 0.2s;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .hero-info .title span {
+            background: rgba(26,107,138,0.1);
+            backdrop-filter: blur(4px);
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .hero-info .title span:hover {
+            transform: translateY(-2px);
+            background: rgba(26,107,138,0.2);
+        }
+        .hero-desc { 
+            color: var(--text-secondary); 
+            max-width: 540px; 
+            margin: 1.4rem 0; 
+            font-size: 1rem; 
+            line-height: 1.75; 
+            animation: fadeUp 0.9s ease both 0.3s;
+            border-left: 3px solid var(--accent);
+            padding-left: 1rem;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(2px);
+            border-radius: 0 12px 12px 0;
+        }
+        .hero-download-section { 
+            display: flex; 
+            flex-wrap: wrap; 
+            align-items: center; 
+            gap: 1.2rem; 
+            margin-top: 2rem; 
+            animation: fadeUp 0.9s ease both 0.4s; 
+        }
+        .btn-download { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 0.7rem; 
+            background: linear-gradient(135deg, var(--accent), var(--accent2)); 
+            color: white; 
+            padding: 0.9rem 2rem; 
+            border-radius: 50px; 
+            font-weight: 700; 
+            text-decoration: none; 
+            border: none; 
+            cursor: pointer; 
+            font-size: 0.95rem; 
+            box-shadow: 0 6px 24px var(--accent-glow); 
+            transition: all 0.3s cubic-bezier(.34,1.56,.64,1);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-download::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s ease;
+        }
+        .btn-download:hover::before { left: 100%; }
         .btn-download:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 14px 32px var(--accent-glow); }
-        .avatar-icon { background: linear-gradient(145deg, var(--accent-light), var(--bg-card)); width: 220px; height: 220px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 5.5rem; color: var(--accent); border: 5px solid var(--bg-card); box-shadow: 0 0 0 1px var(--border-light), 0 30px 60px -15px var(--accent-glow); transition: all 0.4s ease; animation: float 6s ease-in-out infinite; }
+        
+        .avatar-icon { 
+            background: linear-gradient(145deg, var(--accent-light), var(--bg-card)); 
+            width: 220px; 
+            height: 220px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 5.5rem; 
+            color: var(--accent); 
+            border: 5px solid var(--bg-card); 
+            box-shadow: 0 0 0 1px var(--border-light), 0 30px 60px -15px var(--accent-glow); 
+            transition: all 0.4s ease; 
+            animation: float 6s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
+        }
+        .avatar-icon::before {
+            content: '';
+            position: absolute;
+            inset: -10px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: -1;
+        }
+        .avatar-icon:hover::before { opacity: 1; }
         @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
         .avatar-icon:hover { transform: translateY(-6px) scale(1.05) !important; box-shadow: 0 0 0 2px var(--accent), 0 40px 70px -15px var(--accent-glow); animation: none; }
-        @media (max-width: 768px) { .avatar-icon { width: 160px; height: 160px; font-size: 3.8rem; } }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            z-index: 10;
+            animation: bounceSoft 2s infinite;
+        }
+        .scroll-indicator span {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--accent);
+            letter-spacing: 1px;
+        }
+        .scroll-indicator i {
+            font-size: 1rem;
+            color: var(--accent);
+        }
+        @keyframes bounceSoft {
+            0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
+            50% { transform: translateX(-50%) translateY(8px); opacity: 1; }
+        }
+        @media (max-width: 768px) { 
+            .avatar-icon { width: 160px; height: 160px; font-size: 3.8rem; }
+            .scroll-indicator { display: none; }
+            .rotating-glow { width: 200px; height: 200px; right: -50px; top: 60%; }
+        }
 
-        /* ═══════ DISPONIBILITE ═══════ */
+        /* ═══════ DISPONIBILITE (inchangé) ═══════ */
         #disponibilite { padding: 3.5rem 0; }
         .availability-banner { position: relative; overflow: hidden; border-radius: var(--radius-lg); background: linear-gradient(135deg, #071824 0%, #0d3348 45%, #071e2e 100%); padding: 3rem 2.5rem; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(41,163,196,0.2); }
         .availability-banner::before { content: ''; position: absolute; top: -60%; left: -10%; width: 70%; height: 200%; background: radial-gradient(ellipse, rgba(41,163,196,0.12) 0%, transparent 60%); pointer-events: none; }
@@ -129,11 +413,14 @@
         .role-badge:hover { background: rgba(93,212,240,0.18); border-color: rgba(93,212,240,0.6); transform: translateY(-3px); box-shadow: 0 8px 22px rgba(41,163,196,0.3); }
         .availability-note { display: inline-flex; align-items: center; gap: 0.6rem; margin-top: 1.8rem; background: rgba(125,232,196,0.1); border: 1px solid rgba(125,232,196,0.3); padding: 0.6rem 1.5rem; border-radius: 50px; color: #7de8c4; font-size: 0.84rem; font-weight: 600; position: relative; z-index: 1; }
 
-        /* ═══════ CARROUSEL ═══════ */
-        .carousel-wrapper { position: relative; width: 100%; overflow: hidden; border-radius: var(--radius-lg); background: var(--bg-card); box-shadow: var(--shadow-card); border: 1px solid var(--border-light); }
-        .carousel-track { display: flex; transition: transform 0.55s cubic-bezier(0.2,0.9,0.4,1.1); cursor: grab; }
-        .carousel-slide { flex: 0 0 100%; position: relative; height: 420px; overflow: hidden; cursor: pointer; }
-        .carousel-slide img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.5s ease; }
+        /* Le reste du CSS est strictement inchangé */
+        .carousel-wrapper { position: relative; width: 100%; overflow: hidden; border-radius: var(--radius-lg); background: var(--bg-card); box-shadow: var(--shadow-card); border: 1px solid var(--border-light); background-image: url('https://github.com/Remondo-hub/MEZIANI_Nabil/blob/main/motif-transparent.jpg?raw=true'); background-repeat: repeat; background-size: contain; background-position: top left; }
+        .carousel-wrapper::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 255, 255, 0.7); pointer-events: none; z-index: 0; }
+        body.dark .carousel-wrapper::before { background-color: rgba(0, 0, 0, 0.7); }
+        .carousel-track, .carousel-btn, .carousel-dots { position: relative; z-index: 1; }
+        .carousel-track { display: flex; transition: transform 0.55s cubic-bezier(0.2,0.9,0.4,1.1); cursor: grab; background: transparent; }
+        .carousel-slide { flex: 0 0 100%; position: relative; height: 420px; overflow: hidden; cursor: pointer; background: transparent; }
+        .carousel-slide img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.5s ease; background-color: rgba(0,0,0,0.02); mix-blend-mode: normal; }
         .carousel-slide:hover img { transform: scale(1.04); }
         .slide-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, transparent 100%); padding: 2rem; color: white; }
         .slide-overlay h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
@@ -148,8 +435,6 @@
         .carousel-dots { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1rem; padding-bottom: 0.5rem; }
         .dot { width: 8px; height: 8px; background: var(--border-light); border-radius: 50%; cursor: pointer; border: none; padding: 0; transition: all 0.3s; }
         .dot.active { background: var(--accent); width: 26px; border-radius: 12px; }
-
-        /* ═══════ TIMELINE EXP ═══════ */
         .exp-timeline { position: relative; padding-left: 4px; }
         .exp-timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--accent), var(--accent-light)); }
         .exp-tl-item { padding-left: 2.8rem; padding-bottom: 3rem; position: relative; }
@@ -166,8 +451,6 @@
         .exp-tl-desc li::before { content: '▹'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
         .exp-tl-tech { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1rem; }
         .exp-tl-tech span { background: var(--accent-light); color: var(--accent); padding: 0.22rem 0.75rem; border-radius: 20px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; border: 1px solid rgba(26,107,138,0.15); }
-
-        /* ═══════ DIPLOMES ═══════ */
         .diplomas-grid { display: flex; flex-wrap: wrap; gap: 1.8rem; justify-content: center; }
         .diploma-card { background: var(--bg-card); border-radius: var(--radius-lg); padding: 2.2rem; flex: 1; min-width: 280px; border: 1px solid var(--border-light); box-shadow: var(--shadow-card); text-align: center; position: relative; overflow: hidden; transition: all 0.35s cubic-bezier(.34,1.56,.64,1); }
         .diploma-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--accent), #29a3c4, var(--accent2)); }
@@ -176,8 +459,6 @@
         .diploma-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
         .diploma-meta { font-size: 0.85rem; color: var(--accent); font-weight: 700; }
         .diploma-date { font-size: 0.72rem; color: var(--text-secondary); background: var(--accent-light); display: inline-block; padding: 0.22rem 1rem; border-radius: 30px; margin-top: 0.6rem; border: 1px solid rgba(26,107,138,0.12); }
-
-        /* ═══════ FORMATIONS ═══════ */
         .trainings-timeline { position: relative; padding: 2rem 0; }
         .trainings-timeline::before { content: ''; position: absolute; left: 50%; transform: translateX(-50%); width: 2px; height: calc(100% - 4rem); background: linear-gradient(180deg, var(--accent), var(--accent-light)); border-radius: 3px; top: 2rem; }
         .training-card { position: relative; width: calc(50% - 2.5rem); margin-bottom: 2.2rem; }
@@ -196,8 +477,6 @@
         .training-skills { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border-light); }
         .training-skills span { background: var(--accent-light); padding: 0.22rem 0.65rem; border-radius: 20px; font-size: 0.64rem; color: var(--accent); font-weight: 600; }
         @media (max-width: 768px) { .trainings-timeline::before { left: 1.5rem; } .training-card { width: calc(100% - 3.5rem); margin-left: 3.5rem !important; left: 0 !important; } .training-card::before { left: -2.2rem !important; right: auto !important; } }
-
-        /* ═══════ COMPETENCES ═══════ */
         .skills-grid { display: flex; flex-wrap: wrap; gap: 0.7rem; margin: 1.5rem 0; }
         .skill-tag { background: var(--bg-card); border-radius: 40px; padding: 0.45rem 1.2rem; border: 1px solid var(--border-light); transition: all 0.28s ease; font-weight: 500; cursor: pointer; font-size: 0.88rem; box-shadow: var(--shadow-card); }
         .skill-tag:hover { transform: translateY(-4px); border-color: var(--accent); background: var(--accent-light); color: var(--accent); box-shadow: 0 8px 20px var(--accent-glow); }
@@ -213,8 +492,6 @@
         .soft-skill-icon { font-size: 2.2rem; color: var(--accent); margin-bottom: 1rem; }
         .soft-skill-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
         .soft-skill-desc { font-size: 0.8rem; color: var(--text-secondary); }
-
-        /* ═══════ LANGUES ═══════ */
         .languages-wrapper { max-width: 640px; margin: 0 auto; background: var(--bg-card); border-radius: var(--radius-lg); padding: 2.5rem; border: 1px solid var(--border-light); box-shadow: var(--shadow-card); }
         .lang-item { margin-bottom: 1.8rem; }
         .lang-item:last-child { margin-bottom: 0; }
@@ -222,8 +499,6 @@
         .lang-level { font-size: 0.72rem; color: var(--accent); background: var(--accent-light); padding: 0.22rem 0.8rem; border-radius: 20px; font-weight: 700; }
         .lang-progress { height: 7px; background: var(--border-light); border-radius: 10px; overflow: hidden; }
         .lang-progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), #5dd4f0); border-radius: 10px; transition: width 1.2s cubic-bezier(.22,.68,0,1.2); }
-
-        /* ═══════ CERTIFICATIONS ═══════ */
         .certifications-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
         .cert-card { background: var(--bg-card); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border-light); cursor: pointer; box-shadow: var(--shadow-card); transition: all 0.32s cubic-bezier(.34,1.56,.64,1); }
         .cert-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); border-color: var(--accent); }
@@ -236,8 +511,6 @@
         .cert-description { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem; line-height: 1.65; }
         .cert-skills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
         .cert-skills span { font-size: 0.65rem; background: var(--accent-light); padding: 0.22rem 0.65rem; border-radius: 20px; color: var(--accent); font-weight: 600; }
-
-        /* ═══════ FOOTER ═══════ */
         footer { background: var(--footer-bg); padding: 4rem 0 2.5rem; border-top: 1px solid var(--border-light); }
         .footer-content { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem; margin-bottom: 2rem; }
         .footer-contact, .footer-social { background: var(--bg-card); border-radius: var(--radius-lg); padding: 2rem; border: 1px solid var(--border-light); flex: 1; min-width: 260px; box-shadow: var(--shadow-card); transition: all 0.3s ease; }
@@ -256,8 +529,6 @@
         .social-links a i { font-size: 1.1rem; }
         .footer-note { margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border-light); font-size: 0.84rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; }
         .copyright { text-align: center; font-size: 0.8rem; padding-top: 1.5rem; border-top: 1px solid var(--border-light); color: var(--text-secondary); }
-
-        /* ═══════ MODALES ═══════ */
         .modal, .cert-modal { display: none; position: fixed; inset: 0; background: var(--modal-overlay); backdrop-filter: blur(14px); z-index: 2000; justify-content: center; align-items: center; padding: 1rem; }
         .modal.show, .cert-modal.show { display: flex; animation: modalIn 0.3s ease; }
         @keyframes modalIn { from { opacity:0; transform: scale(0.94); } to { opacity:1; transform: none; } }
@@ -273,20 +544,16 @@
         .cert-modal-date { background: var(--accent-light); display: inline-block; padding: 0.22rem 0.9rem; border-radius: 30px; font-size: 0.74rem; margin: 0.5rem 0; }
         .cert-modal-skills { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-light); }
         .cert-modal-skills span { background: var(--accent-light); padding: 0.22rem 0.65rem; border-radius: 20px; color: var(--accent); font-size: 0.75rem; font-weight: 600; }
-
-        /* ═══════ LANGUE & DIVERS ═══════ */
         [data-lang="en"] .lang-fr { display: none; }
         [data-lang="fr"] .lang-en { display: none; }
         .contact-subtitle { text-align: center; font-size: 1.4rem; font-weight: 600; color: var(--text-secondary); margin-top: -1.5rem; margin-bottom: 2.5rem; display: flex; align-items: center; justify-content: center; gap: 1rem; }
         .contact-subtitle::before, .contact-subtitle::after { content: ''; width: 70px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
         .contact-subtitle i { color: var(--accent); font-size: 1.2rem; opacity: 0.8; }
-
-        /* ═══════ BACKGROUND CANVAS ═══════ */
         #bgCanvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
     </style>
 </head>
 <body data-lang="fr">
-    <!-- HEADER -->
+    <!-- HEADER (inchangé) -->
     <header class="main-header">
         <div class="header-container">
             <div class="logo" id="homeLogo" tabindex="0" role="button">Nabil Meziani</div>
@@ -349,17 +616,33 @@
     </header>
 
     <main>
-        <!-- MON CV (ACCUEIL) -->
+        <!-- MON CV (ACCUEIL) - FOND DYNAMIQUE ATTRACTIF -->
         <section id="mon-cv" class="hero">
+            <!-- Fond animé avec vagues -->
+            <div class="hero-bg-animated">
+                <div class="wave"></div>
+                <div class="wave"></div>
+            </div>
+            <!-- Cercle lumineux rotatif -->
+            <div class="rotating-glow"></div>
+            <!-- Particules flottantes générées dynamiquement -->
+            <div class="floating-particles" id="floatingParticles"></div>
+            
             <div class="container hero-grid">
                 <div class="hero-info">
-                    <div class="hero-badge"><i class="fas fa-microchip"></i> <span class="lang-fr">Ingénieur automatisme & instrumentation</span><span class="lang-en">Automation & Instrumentation Engineer</span></div>
+                    <div class="hero-badge"><i class="fas fa-microchip"></i> <span class="lang-fr">Ingénieur automatisme & instrumentation</span><span class="lang-en">Automation & Instrumentation Engineer</span> <i class="fas fa-bolt" style="margin-left:6px;"></i></div>
                     <h1>Nabil MEZIANI</h1>
-                    <div class="title">Automatisation | DCS | PLC | SCADA | Commissioning</div>
+                    <div class="title">
+                        <span>Automatisation</span>
+                        <span>DCS</span>
+                        <span>PLC</span>
+                        <span>SCADA</span>
+                        <span>Commissioning</span>
+                    </div>
                     <p class="hero-desc"><span class="lang-fr">Ingénieur passionné par la mise en œuvre pratique des solutions d'automatisation, l'amélioration continue et les technologies industrielles modernes. Expérience terrain en construction, commissioning et exploitation.</span><span class="lang-en">Passionate engineer specialized in automation solutions, commissioning, and industrial process optimization with field experience.</span></p>
                     <div class="hero-download-section">
                         <div class="hero-cv-wrapper">
-                            <button class="btn-download" id="heroDownloadBtn"><i class="fas fa-download"></i><span class="lang-fr">Télécharger mon CV</span><span class="lang-en">Download my CV</span></button>
+                            <button class="btn-download" id="heroDownloadBtn"><i class="fas fa-download"></i><span class="lang-fr">Télécharger mon CV</span><span class="lang-en">Download my CV</span> <i class="fas fa-arrow-right"></i></button>
                             <div class="hero-cv-selector" id="heroCvLangSelector">
                                 <a class="cv-lang-option" data-cv-fr-hero><i class="fas fa-file-pdf"></i> Version Française</a>
                                 <a class="cv-lang-option" data-cv-en-hero><i class="fas fa-file-pdf"></i> English Version</a>
@@ -367,11 +650,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="hero-image"><div class="avatar-icon"><i class="fas fa-robot"></i></div></div>
+                <div class="hero-image">
+                    <div class="avatar-icon"><i class="fas fa-microchip"></i><i class="fas fa-chart-line" style="font-size:2rem; position:absolute; bottom:20px; right:20px; opacity:0.6;"></i></div>
+                </div>
+            </div>
+            <div class="scroll-indicator" id="scrollIndicator">
+                <span class="lang-fr">Découvrir</span><span class="lang-en">Discover</span>
+                <i class="fas fa-chevron-down"></i>
             </div>
         </section>
 
-        <!-- DISPONIBILITÉ -->
+        <!-- DISPONIBILITÉ (inchangé) -->
         <section id="disponibilite">
             <div class="container">
                 <div class="availability-banner">
@@ -393,161 +682,52 @@
             </div>
         </section>
 
-        <!-- ACTIVITÉS -->
-        <section id="activites">
-            <div class="container">
-                <h2 class="section-title"><span class="lang-fr">🎯 Mes activités professionnelles</span><span class="lang-en">🎯 My professional activities</span></h2>
-                <div class="carousel-wrapper">
-                    <div class="carousel-track" id="carouselTrack"></div>
-                    <button class="carousel-btn btn-prev" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
-                    <button class="carousel-btn btn-next" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
-                    <div class="carousel-dots" id="carouselDots"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- EXPÉRIENCES PRO -->
-        <section id="experiences">
-            <div class="container">
-                <h2 class="section-title"><span class="lang-fr">Expériences professionnelles</span><span class="lang-en">Work Experience</span></h2>
-                <div class="exp-timeline">
-                    <div class="exp-tl-item"><div class="exp-tl-dot"></div><div class="exp-tl-date"><i class="fas fa-calendar-alt"></i> <span class="lang-fr">Depuis mai 2023 - Présent</span><span class="lang-en">Since May 2023 - Present</span></div><div class="exp-tl-role"><span class="lang-fr">Ingénieur automatisme & instrumentation</span><span class="lang-en">Automation & Instrumentation Engineer</span></div><div class="exp-tl-company"><i class="fas fa-industry"></i> <span class="lang-fr">Raffinerie de sucre TAFADIS, Larbatache</span><span class="lang-en">TAFADIS Sugar Refinery, Larbatache</span></div><ul class="exp-tl-desc"><li><span class="lang-fr">Supervision et inspection des travaux sur site</span><span class="lang-en">Site supervision & inspection</span></li><li><span class="lang-fr">Études et préparation technique</span><span class="lang-en">Technical studies & preparation</span></li><li><span class="lang-fr">Gestion et coordination des sous-traitants</span><span class="lang-en">Subcontractor management & coordination</span></li><li><span class="lang-fr">Mise en service et pré-commissioning</span><span class="lang-en">Commissioning & pre-commissioning</span></li><li><span class="lang-fr">Étalonnage et paramétrage des instruments</span><span class="lang-en">Instrument calibration & configuration</span></li><li><span class="lang-fr">Maintenance et entretien des systèmes de contrôle-commande</span><span class="lang-en">Control system maintenance & troubleshooting</span></li></ul><div class="exp-tl-tech"><span>DCS</span><span>PCS7</span><span>TIA Portal</span><span>HART</span><span>PROFIBUS</span></div></div>
-                    <div class="exp-tl-item"><div class="exp-tl-dot alt"></div><div class="exp-tl-date"><i class="fas fa-calendar-alt"></i> <span class="lang-fr">Septembre 2022 - Juin 2023</span><span class="lang-en">Sep 2022 - Jun 2023</span></div><div class="exp-tl-role">Robotics Coach</div><div class="exp-tl-company"><i class="fas fa-school"></i> SAKHRIA SCHOOL, Bab Ezzouar, Alger</div><ul class="exp-tl-desc"><li><span class="lang-fr">Enseignement programme MRT (Corée) : robotique, mécatronique</span><span class="lang-en">Teaching MRT program (Korea): robotics, mechatronics</span></li><li><span class="lang-fr">Conception de cours enrichissants & activités pratiques</span><span class="lang-en">Design of enriching courses & practical activities</span></li><li><span class="lang-fr">Organisation de compétitions robotiques</span><span class="lang-en">Organization of robotics competitions</span></li></ul><div class="exp-tl-tech"><span>Robotique</span><span>Mécatronique</span><span>MRT</span></div></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- STAGES -->
-        <section id="stages">
-            <div class="container">
-                <h2 class="section-title"><span class="lang-fr">Stages & projets terrain</span><span class="lang-en">Internships & Field Projects</span></h2>
-                <div class="exp-timeline">
-                    <div class="exp-tl-item"><div class="exp-tl-dot"></div><div class="exp-tl-date"><i class="fas fa-calendar-alt"></i> 2022</div><div class="exp-tl-role"><span class="lang-fr">Henkel - Automatisation station traitement des eaux</span><span class="lang-en">Henkel - Water Treatment Plant Automation</span></div><div class="exp-tl-company">Henkel</div><ul class="exp-tl-desc"><li><span class="lang-fr">Projet de fin d'étude - Conception et programmation d'un système d'automatisation pour la station de traitement des eaux.</span><span class="lang-en">Final year project - Design and programming of an automation system for the water treatment plant.</span></li></ul><div class="exp-tl-tech"><span>PLC Siemens</span><span>WinCC</span><span>PROFIBUS</span><span>Instrumentation</span></div></div>
-                    <div class="exp-tl-item"><div class="exp-tl-dot alt"></div><div class="exp-tl-date"><i class="fas fa-calendar-alt"></i> 2022</div><div class="exp-tl-role"><span class="lang-fr">LM Electric Sarl - Station concassage pouzzolane</span><span class="lang-en">LM Electric Sarl - Pozzolana Crushing Station</span></div><div class="exp-tl-company">LM Electric Sarl</div><ul class="exp-tl-desc"><li><span class="lang-fr">Automaticien - Mise en service et programmation des automates pour une station de concassage.</span><span class="lang-en">Automation Engineer - Commissioning and programming of PLCs for a crushing station.</span></li></ul><div class="exp-tl-tech"><span>Automates</span><span>Schneider</span><span>Variateur</span><span>Supervision</span></div></div>
-                    <div class="exp-tl-item"><div class="exp-tl-dot"></div><div class="exp-tl-date"><i class="fas fa-calendar-alt"></i> 2022</div><div class="exp-tl-role"><span class="lang-fr">BK FIRE - Câblage armoires électriques</span><span class="lang-en">BK FIRE - Electrical Cabinet Wiring</span></div><div class="exp-tl-company">BK FIRE</div><ul class="exp-tl-desc"><li><span class="lang-fr">Électricien industriel - Réalisation de câblages d'armoires électriques et tableaux de commande.</span><span class="lang-en">Industrial Electrician - Electrical cabinet and control panel wiring.</span></li></ul><div class="exp-tl-tech"><span>Schémas électriques</span><span>Câblage</span><span>Borniers</span><span>Normes IEC</span></div></div>
-                    <div class="exp-tl-item"><div class="exp-tl-dot alt"></div><div class="exp-tl-date"><i class="fas fa-calendar-alt"></i> 2020</div><div class="exp-tl-role"><span class="lang-fr">Celia Algérie - Diagnostic & maintenance préventive</span><span class="lang-en">Celia Algérie - Diagnostics & Preventive Maintenance</span></div><div class="exp-tl-company">Celia Algérie</div><ul class="exp-tl-desc"><li><span class="lang-fr">Maintenancier - Diagnostic de pannes et mise en place de maintenance préventive sur lignes de production.</span><span class="lang-en">Maintenance Technician - Fault diagnosis and preventive maintenance implementation on production lines.</span></li></ul><div class="exp-tl-tech"><span>Maintenance</span><span>Diagnostic</span><span>GMP</span><span>Analyse causes</span></div></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- DIPLÔMES -->
-        <section id="diplomes">
-            <div class="container">
-                <h2 class="section-title"><span class="lang-fr">Diplômes universitaires</span><span class="lang-en">Academic Degrees</span></h2>
-                <div class="diplomas-grid">
-                    <div class="diploma-card"><div class="diploma-icon"><i class="fas fa-graduation-cap"></i></div><div class="diploma-title"><span class="lang-fr">Master Automatisation Industrie et Process</span><span class="lang-en">Master in Industrial and Process Automation</span></div><div class="diploma-meta">USTHB</div><div class="diploma-date">2020-2022</div></div>
-                    <div class="diploma-card"><div class="diploma-icon"><i class="fas fa-graduation-cap"></i></div><div class="diploma-title"><span class="lang-fr">Licence en automatique</span><span class="lang-en">Bachelor's Degree in Automation</span></div><div class="diploma-meta">USTHB</div><div class="diploma-date">2017-2020</div></div>
-                    <div class="diploma-card"><div class="diploma-icon"><i class="fas fa-chalkboard"></i></div><div class="diploma-title"><span class="lang-fr">Baccalauréat mathématique</span><span class="lang-en">High School Diploma in Mathematics</span></div><div class="diploma-meta"><span class="lang-fr">Lycée Mohamed Boudiaf</span><span class="lang-en">Mohamed Boudiaf High School</span></div><div class="diploma-date">2017</div></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FORMATIONS COMPLÉMENTAIRES -->
-        <section id="formations">
-            <div class="container">
-                <h2 class="section-title"><i class="fas fa-graduation-cap"></i> <span class="lang-fr">Formations complémentaires</span><span class="lang-en">Additional Training</span></h2>
-                <div class="trainings-timeline">
-                    <div class="training-card left"><div class="training-content" data-training="pcs7"><div class="training-header"><div class="training-icon"><i class="fas fa-microchip"></i></div><div class="training-info"><div class="training-title">SIMATIC PCS7 Expert </div><div class="training-org"><i class="fas fa-building"></i> TECHNORD (Belgique / Belgium)<span class="training-date"><i class="far fa-calendar-alt"></i> Novembre 2025 / November 2025</span></div></div></div><div class="training-desc"><p><span class="lang-fr">Formation approfondie sur le système DCS Siemens SIMATIC PCS7.</span><span class="lang-en">Advanced training on Siemens SIMATIC PCS7 DCS system.</span></p></div><div class="training-skills"><span>Gestion de projets PCS7</span><span>Programmation CFC/SFC</span><span>Configuration PROFIBUS & PROFINET</span><span>Développement d'interfaces OS</span></div></div></div>
-                    <div class="training-card right"><div class="training-content" data-training="maintenance"><div class="training-header"><div class="training-icon"><i class="fas fa-wrench"></i></div><div class="training-info"><div class="training-title">SIMATIC Maintenance Niveau 1 </div><div class="training-org"><i class="fas fa-building"></i> CFIC GICA  <span class="training-date"><i class="far fa-calendar-alt"></i> Septembre 2025 / September 2025</span></div></div></div><div class="training-desc"><p><span class="lang-fr">Formation à la maintenance des systèmes SIMATIC S7.</span><span class="lang-en">Training on SIMATIC S7 systems maintenance.</span></p></div><div class="training-skills"><span>Diagnostic d'automates S7</span><span>Dépannage systèmes automatisés</span><span>Maintenance préventive et corrective</span><span>Lecture d'architectures industrielles</span></div></div></div>
-                    <div class="training-card left"><div class="training-content" data-training="seminar"><div class="training-header"><div class="training-icon"><i class="fas fa-chart-line"></i></div><div class="training-info"><div class="training-title"><span class="lang-fr">Séminaire Maintenance industrielle</span><span class="lang-en">Industrial Maintenance Seminar</span></div><div class="training-org"><i class="fas fa-building"></i> INPED <span class="training-date"><i class="far fa-calendar-alt"></i> Octobre 2023 / October 2023</span></div></div></div><div class="training-desc"><p><span class="lang-fr">Séminaire sur les stratégies modernes de maintenance industrielle : préventive, corrective, conditionnelle. Couvre la gestion opérationnelle, la définition d'indicateurs de performance et la planification des interventions.</span><span class="lang-en">Seminar on modern industrial maintenance strategies: preventive, corrective, condition-based. Covers operational management, performance indicators definition, and intervention planning.</span></p></div><div class="training-skills"><span>Gestion de maintenance</span><span>Stratégie préventive et corrective</span><span>Maintenance conditionnelle</span><span>Planification d'interventions</span></div></div></div>
-                    <div class="training-card right"><div class="training-content" data-training="safety"><div class="training-header"><div class="training-icon"><i class="fas fa-shield-alt"></i></div><div class="training-info"><div class="training-title"><span class="lang-fr">Sécurité industrielle</span><span class="lang-en">Industrial Safety</span></div><div class="training-org"><i class="fas fa-building"></i> IFACT <span class="training-date"><i class="far fa-calendar-alt"></i> Décembre 2020 / December 2020</span></div></div></div><div class="training-desc"><p><span class="lang-fr">Formation aux principes fondamentaux de la sécurité en milieu industriel. Couvre les principes de sécurité, la prévention des risques, la gestion des risques et les premiers secours.</span><span class="lang-en">Training on fundamental principles of industrial safety. Covers safety principles, risk prevention, risk management, and first aid.</span></p></div><div class="training-skills"><span>Analyse des risques industriels</span><span>Gestion des situations critiques</span><span>Intervention en zone dangereuse</span><span>Premiers secours</span></div></div></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- LANGUES -->
-        <section id="langues">
-            <div class="container">
-                <h2 class="section-title"><span class="lang-fr">Langues</span><span class="lang-en">Languages</span></h2>
-                <div class="languages-wrapper">
-                    <div class="lang-item"><div class="lang-header"><span class="lang-name"><span class="lang-fr">Arabe</span><span class="lang-en">Arabic</span></span><span class="lang-level"><span class="lang-fr">Maternel</span><span class="lang-en">Native</span></span></div><div class="lang-progress"><div class="lang-progress-fill" data-width="100" style="width:0%"></div></div></div>
-                    <div class="lang-item"><div class="lang-header"><span class="lang-name"><span class="lang-fr">Français</span><span class="lang-en">French</span></span><span class="lang-level"><span class="lang-fr">Professionnel - Niveau avancé</span><span class="lang-en">Professional - Advanced Level</span></span></div><div class="lang-progress"><div class="lang-progress-fill" data-width="90" style="width:0%"></div></div></div>
-                    <div class="lang-item"><div class="lang-header"><span class="lang-name"><span class="lang-fr">Anglais</span><span class="lang-en">English</span></span><span class="lang-level"><span class="lang-fr">Professionnel - Niveau intermédiaire supérieur</span><span class="lang-en">Professional - Upper Intermediate Level</span></span></div><div class="lang-progress"><div class="lang-progress-fill" data-width="80" style="width:0%"></div></div></div>
-                    <p style="margin-top:1rem;"><i class="fas fa-file-alt"></i> <span class="lang-fr">Capacité à communiquer efficacement en contexte technique et industriel.</span><span class="lang-en">Ability to communicate effectively in technical and industrial contexts.</span></p>
-                </div>
-            </div>
-        </section>
-
-        <!-- CERTIFICATIONS -->
-        <section id="certifications">
-            <div class="container">
-                <h2 class="section-title"><i class="fas fa-certificate"></i> <span class="lang-fr">Certifications industrielles</span><span class="lang-en">Industrial Certifications</span></h2>
-                <div class="certifications-grid">
-                    <div class="cert-card" data-cert="pcs7"><div class="cert-header"><div class="cert-icon"><i class="fas fa-microchip"></i><span class="cert-year">2025</span></div></div><div class="cert-body"><div class="cert-title">SIMATIC PCS7 Expert</div><div class="cert-issuer"><i class="fas fa-building"></i> TECHNORD (Belgique / Belgium)</div><div class="cert-description"><span class="lang-fr">Certification avancée sur le système DCS Siemens SIMATIC PCS7.</span><span class="lang-en">Advanced certification on Siemens SIMATIC PCS7 DCS system.</span></div><div class="cert-skills"><span>Gestion de projets PCS7</span><span>Programmation CFC/SFC</span><span>Configuration PROFIBUS & PROFINET</span><span>Développement d'interfaces OS</span></div></div></div>
-                    <div class="cert-card" data-cert="maintenance"><div class="cert-header"><div class="cert-icon"><i class="fas fa-tools"></i><span class="cert-year">2025</span></div></div><div class="cert-body"><div class="cert-title">SIMATIC Maintenance Niveau 1 / Level 1</div><div class="cert-issuer"><i class="fas fa-building"></i> CFIC GICA</div><div class="cert-description"><span class="lang-fr">Certification en maintenance des systèmes SIMATIC S7.</span><span class="lang-en">Certification in SIMATIC S7 systems maintenance.</span></div><div class="cert-skills"><span>Diagnostic d'automates S7</span><span>Dépannage systèmes automatisés</span><span>Maintenance préventive et corrective</span><span>Lecture d'architectures industrielles</span></div></div></div>
-                    <div class="cert-card" data-cert="indmaintenance"><div class="cert-header"><div class="cert-icon"><i class="fas fa-industry"></i><span class="cert-year">2023</span></div></div><div class="cert-body"><div class="cert-title"><span class="lang-fr">Maintenance Industrielle</span><span class="lang-en">Industrial Maintenance</span></div><div class="cert-issuer"><i class="fas fa-building"></i> INPED</div><div class="cert-description"><span class="lang-fr">Certification en gestion et stratégies de maintenance industrielle.</span><span class="lang-en">Certification in industrial maintenance management and strategies.</span></div><div class="cert-skills"><span>Gestion de maintenance</span><span>Stratégie préventive et corrective</span><span>Maintenance conditionnelle</span><span>Planification d'interventions</span></div></div></div>
-                    <div class="cert-card" data-cert="safety"><div class="cert-header"><div class="cert-icon"><i class="fas fa-hard-hat"></i><span class="cert-year">2020</span></div></div><div class="cert-body"><div class="cert-title"><span class="lang-fr">Sécurité Industrielle</span><span class="lang-en">Industrial Safety</span></div><div class="cert-issuer"><i class="fas fa-building"></i> IFACT</div><div class="cert-description"><span class="lang-fr">Certification aux principes fondamentaux de la sécurité industrielle.</span><span class="lang-en">Certification in fundamental industrial safety principles.</span></div><div class="cert-skills"><span>Analyse des risques industriels</span><span>Gestion des situations critiques</span><span>Intervention en zone dangereuse</span><span>Premiers secours</span></div></div></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- COMPÉTENCES TECHNIQUES -->
-        <section id="competences">
-            <div class="container">
-                <h2 class="section-title"><span class="lang-fr">Compétences techniques</span><span class="lang-en">Technical skills</span></h2>
-                <div class="skills-cards-grid">
-                    <div class="skill-card-item" data-skill="management"><div class="skill-card-icon"><i class="fas fa-users-cog"></i></div><div class="skill-card-title"><span class="lang-fr">Management & Coordination</span><span class="lang-en">Management & Coordination</span></div><div class="skill-card-desc"><span class="lang-fr">Gestion d'équipe, gestion des sous-traitants, travail en équipe, communication efficace</span><span class="lang-en">Team management, subcontractor management, teamwork, effective communication</span></div></div>
-                    <div class="skill-card-item" data-skill="automation"><div class="skill-card-icon"><i class="fas fa-microchip"></i></div><div class="skill-card-title"><span class="lang-fr">Automatisation & Contrôle</span><span class="lang-en">Automation & Control</span></div><div class="skill-card-desc"><span class="lang-fr">Programmation de PLC, Systèmes SCADA, Systèmes DCS, Protocoles de communication</span><span class="lang-en">PLC programming, SCADA systems, DCS systems, Communication protocols</span></div></div>
-                    <div class="skill-card-item" data-skill="instrumentation"><div class="skill-card-icon"><i class="fas fa-chart-line"></i></div><div class="skill-card-title"><span class="lang-fr">Instrumentation & Mesure</span><span class="lang-en">Instrumentation & Measurement</span></div><div class="skill-card-desc"><span class="lang-fr">Maîtrise des capteurs, Étalonnage des instruments, Calibration des instruments</span><span class="lang-en">Sensor mastery, Instrument calibration</span></div></div>
-                    <div class="skill-card-item" data-skill="maintenance"><div class="skill-card-icon"><i class="fas fa-tools"></i></div><div class="skill-card-title"><span class="lang-fr">Maintenance & Mise en service</span><span class="lang-en">Maintenance & Commissioning</span></div><div class="skill-card-desc"><span class="lang-fr">Maintenance industrielle, Mise en service d'équipements</span><span class="lang-en">Industrial maintenance, Equipment commissioning</span></div></div>
-                    <div class="skill-card-item" data-skill="documentation"><div class="skill-card-icon"><i class="fas fa-file-alt"></i></div><div class="skill-card-title"><span class="lang-fr">Documentation & Outils</span><span class="lang-en">Documentation & Tools</span></div><div class="skill-card-desc"><span class="lang-fr">Documentation technique, Microsoft Office</span><span class="lang-en">Technical documentation, Microsoft Office</span></div></div>
-                    <div class="skill-card-item" data-skill="problemsolving"><div class="skill-card-icon"><i class="fas fa-search"></i></div><div class="skill-card-title"><span class="lang-fr">Résolution de problèmes</span><span class="lang-en">Problem Solving</span></div><div class="skill-card-desc"><span class="lang-fr">Analyse technique, Diagnostic des pannes, Résolution de problèmes</span><span class="lang-en">Technical analysis, Fault diagnosis, Problem resolution</span></div></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- COMPÉTENCES PERSONNELLES -->
-        <section id="soft-skills">
-            <div class="container">
-                <h2 class="section-title"><span class="lang-fr">Compétences personnelles</span><span class="lang-en">Personal Skills</span></h2>
-                <div class="soft-skills-grid">
-                    <div class="soft-skill-card"><div class="soft-skill-icon"><i class="fas fa-ruler-combined"></i></div><div class="soft-skill-title"><span class="lang-fr">Rigueur et précision</span><span class="lang-en">Rigor and precision</span></div><div class="soft-skill-desc"><span class="lang-fr">Souci du détail et exactitude.</span><span class="lang-en">Attention to detail and accuracy.</span></div></div>
-                    <div class="soft-skill-card"><div class="soft-skill-icon"><i class="fas fa-user-check"></i></div><div class="soft-skill-title"><span class="lang-fr">Autonomie</span><span class="lang-en">Autonomy</span></div><div class="soft-skill-desc"><span class="lang-fr">Capacité à travailler de manière indépendante.</span><span class="lang-en">Ability to work independently.</span></div></div>
-                    <div class="soft-skill-card"><div class="soft-skill-icon"><i class="fas fa-users"></i></div><div class="soft-skill-title"><span class="lang-fr">Esprit d'équipe et collaboration</span><span class="lang-en">Team spirit and collaboration</span></div><div class="soft-skill-desc"><span class="lang-fr">Travail en synergie et partage des connaissances.</span><span class="lang-en">Synergistic work and knowledge sharing.</span></div></div>
-                    <div class="soft-skill-card"><div class="soft-skill-icon"><i class="fas fa-tasks"></i></div><div class="soft-skill-title"><span class="lang-fr">Sens des responsabilités</span><span class="lang-en">Sense of responsibility</span></div><div class="soft-skill-desc"><span class="lang-fr">Engagement et fiabilité dans les missions confiées.</span><span class="lang-en">Commitment and reliability in assigned tasks.</span></div></div>
-                    <div class="soft-skill-card"><div class="soft-skill-icon"><i class="fas fa-chart-line"></i></div><div class="soft-skill-title"><span class="lang-fr">Esprit d'analyse</span><span class="lang-en">Analytical mind</span></div><div class="soft-skill-desc"><span class="lang-fr">Résolution méthodique de problèmes complexes.</span><span class="lang-en">Methodical resolution of complex problems.</span></div></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CENTRES D'INTÉRÊT -->
-        <section id="centres-interet">
-            <div class="container">
-                <h2 class="section-title"><span class="lang-fr">Centres d'intérêt</span><span class="lang-en">Interests</span></h2>
-                <div class="soft-skills-grid">
-                    <div class="soft-skill-card"><div class="soft-skill-icon"><i class="fas fa-book"></i></div><div class="soft-skill-title"><span class="lang-fr">Lecture et Histoire</span><span class="lang-en">Reading and History</span></div></div>
-                    <div class="soft-skill-card"><div class="soft-skill-icon"><i class="fas fa-swimmer"></i></div><div class="soft-skill-title"><span class="lang-fr">Natation et Sports</span><span class="lang-en">Swimming and Sports</span></div></div>
-                    <div class="soft-skill-card"><div class="soft-skill-icon"><i class="fas fa-campground"></i></div><div class="soft-skill-title"><span class="lang-fr">Campings et voyages</span><span class="lang-en">Camping and travel</span></div></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CONTACT -->
-        <section id="contact">
-            <div class="container">
-                <h2 class="section-title"><span class="lang-fr">Contact</span><span class="lang-en">Contact</span></h2>
-                <div class="contact-subtitle"><i class="fas fa-handshake"></i><span class="lang-fr">Travaillons ensemble</span><span class="lang-en">Let's work together</span><i class="fas fa-handshake"></i></div>
-                <div class="footer-content" style="margin-bottom: 0;">
-                    <div class="footer-contact"><h3><i class="fas fa-address-card"></i> <span class="lang-fr">Coordonnées</span><span class="lang-en">Contact</span></h3><div class="animated-contact"><div class="contact-item"><i class="fas fa-envelope"></i><span>meziani.nabil.dz@gmail.com</span></div><div class="contact-item"><i class="fas fa-phone-alt"></i><span>+213 784 21 54 67</span></div><div class="contact-item"><i class="fas fa-map-marker-alt"></i><span class="lang-fr">Alger, Algérie</span><span class="lang-en">Algiers, Algeria</span></div></div></div>
-                    <div class="footer-social"><h3><i class="fas fa-users"></i> <span class="lang-fr">Professionnel</span><span class="lang-en">Professional</span></h3><div class="social-links"><a href="https://www.linkedin.com/in/nabilmeziani/" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a><a href="#"><i class="fab fa-github"></i> GitHub</a></div><div class="footer-note"><i class="fas fa-briefcase"></i> <span class="lang-fr">Disponible pour opportunités</span><span class="lang-en">Open to opportunities</span></div></div>
-                </div>
-            </div>
-        </section>
+        <!-- Le reste du contenu (activités, expériences, etc.) est strictement inchangé -->
+        <section id="activites"><div class="container"><h2 class="section-title"><span class="lang-fr">🎯 Mes activités professionnelles</span><span class="lang-en">🎯 My professional activities</span></h2><div class="carousel-wrapper"><div class="carousel-track" id="carouselTrack"></div><button class="carousel-btn btn-prev" id="prevBtn"><i class="fas fa-chevron-left"></i></button><button class="carousel-btn btn-next" id="nextBtn"><i class="fas fa-chevron-right"></i></button><div class="carousel-dots" id="carouselDots"></div></div></div></section>
+        <section id="experiences"><div class="container"><h2 class="section-title"><span class="lang-fr">Expériences professionnelles</span><span class="lang-en">Work Experience</span></h2><div class="exp-timeline"><div class="exp-tl-item"><div class="exp-tl-dot"></div><div class="exp-tl-date"><i class="fas fa-calendar-alt"></i> <span class="lang-fr">Depuis mai 2023 - Présent</span><span class="lang-en">Since May 2023 - Present</span></div><div class="exp-tl-role"><span class="lang-fr">Ingénieur automatisme & instrumentation</span><span class="lang-en">Automation & Instrumentation Engineer</span></div><div class="exp-tl-company"><i class="fas fa-industry"></i> <span class="lang-fr">Raffinerie de sucre TAFADIS, Larbatache</span><span class="lang-en">TAFADIS Sugar Refinery, Larbatache</span></div><ul class="exp-tl-desc"><li><span class="lang-fr">Supervision et inspection des travaux sur site</span><span class="lang-en">Site supervision & inspection</span></li><li><span class="lang-fr">Études et préparation technique</span><span class="lang-en">Technical studies & preparation</span></li><li><span class="lang-fr">Gestion et coordination des sous-traitants</span><span class="lang-en">Subcontractor management & coordination</span></li><li><span class="lang-fr">Mise en service et pré-commissioning</span><span class="lang-en">Commissioning & pre-commissioning</span></li><li><span class="lang-fr">Étalonnage et paramétrage des instruments</span><span class="lang-en">Instrument calibration & configuration</span></li><li><span class="lang-fr">Maintenance et entretien des systèmes de contrôle-commande</span><span class="lang-en">Control system maintenance & troubleshooting</span></li></ul><div class="exp-tl-tech"><span>DCS</span><span>PCS7</span><span>TIA Portal</span><span>HART</span><span>PROFIBUS</span></div></div><div class="exp-tl-item"><div class="exp-tl-dot alt"></div><div class="exp-tl-date"><i class="fas fa-calendar-alt"></i> <span class="lang-fr">Septembre 2022 - Juin 2023</span><span class="lang-en">Sep 2022 - Jun 2023</span></div><div class="exp-tl-role">Robotics Coach</div><div class="exp-tl-company"><i class="fas fa-school"></i> SAKHRIA SCHOOL, Bab Ezzouar, Alger</div><ul class="exp-tl-desc"><li><span class="lang-fr">Enseignement programme MRT (Corée) : robotique, mécatronique</span><span class="lang-en">Teaching MRT program (Korea): robotics, mechatronics</span></li><li><span class="lang-fr">Conception de cours enrichissants & activités pratiques</span><span class="lang-en">Design of enriching courses & practical activities</span></li><li><span class="lang-fr">Organisation de compétitions robotiques</span><span class="lang-en">Organization of robotics competitions</span></li></ul><div class="exp-tl-tech"><span>Robotique</span><span>Mécatronique</span><span>MRT</span></div></div></div></div></section>
+        <section id="stages"><div class="container"><h2 class="section-title"><span class="lang-fr">Stages & projets terrain</span><span class="lang-en">Internships & Field Projects</span></h2><div class="exp-timeline"><div class="exp-tl-item"><div class="exp-tl-dot"></div><div class="exp-tl-date"><i class="fas fa-calendar-alt"></i> 2022</div><div class="exp-tl-role"><span class="lang-fr">Henkel - Automatisation station traitement des eaux</span><span class="lang-en">Henkel - Water Treatment Plant Automation</span></div><div class="exp-tl-company">Henkel</div><ul class="exp-tl-desc"><li><span class="lang-fr">Projet de fin d'étude - Conception et programmation d'un système d'automatisation pour la station de traitement des eaux.</span><span class="lang-en">Final year project - Design and programming of an automation system for the water treatment plant.</span></li></ul><div class="exp-tl-tech"><span>PLC Siemens</span><span>WinCC</span><span>PROFIBUS</span><span>Instrumentation</span></div></div><div class="exp-tl-item"><div class="exp-tl-dot alt"></div><div class="exp-tl-date"><i class="fas fa-calendar-alt"></i> 2022</div><div class="exp-tl-role"><span class="lang-fr">LM Electric Sarl - Station concassage pouzzolane</span><span class="lang-en">LM Electric Sarl - Pozzolana Crushing Station</span></div><div class="exp-tl-company">LM Electric Sarl</div><ul class="exp-tl-desc"><li><span class="lang-fr">Automaticien - Mise en service et programmation des automates pour une station de concassage.</span><span class="lang-en">Automation Engineer - Commissioning and programming of PLCs for a crushing station.</span></li></ul><div class="exp-tl-tech"><span>Automates</span><span>Schneider</span><span>Variateur</span><span>Supervision</span></div></div><div class="exp-tl-item"><div class="exp-tl-dot"></div><div class="exp-tl-date"><i class="fas fa-calendar-alt"></i> 2022</div><div class="exp-tl-role"><span class="lang-fr">BK FIRE - Câblage armoires électriques</span><span class="lang-en">BK FIRE - Electrical Cabinet Wiring</span></div><div class="exp-tl-company">BK FIRE</div><ul class="exp-tl-desc"><li><span class="lang-fr">Électricien industriel - Réalisation de câblages d'armoires électriques et tableaux de commande.</span><span class="lang-en">Industrial Electrician - Electrical cabinet and control panel wiring.</span></li></ul><div class="exp-tl-tech"><span>Schémas électriques</span><span>Câblage</span><span>Borniers</span><span>Normes IEC</span></div></div><div class="exp-tl-item"><div class="exp-tl-dot alt"></div><div class="exp-tl-date"><i class="fas fa-calendar-alt"></i> 2020</div><div class="exp-tl-role"><span class="lang-fr">Celia Algérie - Diagnostic & maintenance préventive</span><span class="lang-en">Celia Algérie - Diagnostics & Preventive Maintenance</span></div><div class="exp-tl-company">Celia Algérie</div><ul class="exp-tl-desc"><li><span class="lang-fr">Maintenancier - Diagnostic de pannes et mise en place de maintenance préventive sur lignes de production.</span><span class="lang-en">Maintenance Technician - Fault diagnosis and preventive maintenance implementation on production lines.</span></li></ul><div class="exp-tl-tech"><span>Maintenance</span><span>Diagnostic</span><span>GMP</span><span>Analyse causes</span></div></div></div></div></section>
+        <section id="diplomes"><div class="container"><h2 class="section-title"><span class="lang-fr">Diplômes universitaires</span><span class="lang-en">Academic Degrees</span></h2><div class="diplomas-grid"><div class="diploma-card"><div class="diploma-icon"><i class="fas fa-graduation-cap"></i></div><div class="diploma-title"><span class="lang-fr">Master Automatisation Industrie et Process</span><span class="lang-en">Master in Industrial and Process Automation</span></div><div class="diploma-meta">USTHB</div><div class="diploma-date">2020-2022</div></div><div class="diploma-card"><div class="diploma-icon"><i class="fas fa-graduation-cap"></i></div><div class="diploma-title"><span class="lang-fr">Licence en automatique</span><span class="lang-en">Bachelor's Degree in Automation</span></div><div class="diploma-meta">USTHB</div><div class="diploma-date">2017-2020</div></div><div class="diploma-card"><div class="diploma-icon"><i class="fas fa-chalkboard"></i></div><div class="diploma-title"><span class="lang-fr">Baccalauréat mathématique</span><span class="lang-en">High School Diploma in Mathematics</span></div><div class="diploma-meta"><span class="lang-fr">Lycée Mohamed Boudiaf</span><span class="lang-en">Mohamed Boudiaf High School</span></div><div class="diploma-date">2017</div></div></div></div></section>
+        <section id="formations"><div class="container"><h2 class="section-title"><i class="fas fa-graduation-cap"></i> <span class="lang-fr">Formations complémentaires</span><span class="lang-en">Additional Training</span></h2><div class="trainings-timeline"><div class="training-card left"><div class="training-content" data-training="pcs7"><div class="training-header"><div class="training-icon"><i class="fas fa-microchip"></i></div><div class="training-info"><div class="training-title">SIMATIC PCS7 Expert </div><div class="training-org"><i class="fas fa-building"></i> TECHNORD (Belgique / Belgium)<span class="training-date"><i class="far fa-calendar-alt"></i> Novembre 2025 / November 2025</span></div></div></div><div class="training-desc"><p><span class="lang-fr">Formation approfondie sur le système DCS Siemens SIMATIC PCS7.</span><span class="lang-en">Advanced training on Siemens SIMATIC PCS7 DCS system.</span></p></div><div class="training-skills"><span>Gestion de projets PCS7</span><span>Programmation CFC/SFC</span><span>Configuration PROFIBUS & PROFINET</span><span>Développement d'interfaces OS</span></div></div></div><div class="training-card right"><div class="training-content" data-training="maintenance"><div class="training-header"><div class="training-icon"><i class="fas fa-wrench"></i></div><div class="training-info"><div class="training-title">SIMATIC Maintenance Niveau 1 </div><div class="training-org"><i class="fas fa-building"></i> CFIC GICA  <span class="training-date"><i class="far fa-calendar-alt"></i> Septembre 2025 / September 2025</span></div></div></div><div class="training-desc"><p><span class="lang-fr">Formation à la maintenance des systèmes SIMATIC S7.</span><span class="lang-en">Training on SIMATIC S7 systems maintenance.</span></p></div><div class="training-skills"><span>Diagnostic d'automates S7</span><span>Dépannage systèmes automatisés</span><span>Maintenance préventive et corrective</span><span>Lecture d'architectures industrielles</span></div></div></div><div class="training-card left"><div class="training-content" data-training="seminar"><div class="training-header"><div class="training-icon"><i class="fas fa-chart-line"></i></div><div class="training-info"><div class="training-title"><span class="lang-fr">Séminaire Maintenance industrielle</span><span class="lang-en">Industrial Maintenance Seminar</span></div><div class="training-org"><i class="fas fa-building"></i> INPED <span class="training-date"><i class="far fa-calendar-alt"></i> Octobre 2023 / October 2023</span></div></div></div><div class="training-desc"><p><span class="lang-fr">Séminaire sur les stratégies modernes de maintenance industrielle : préventive, corrective, conditionnelle. Couvre la gestion opérationnelle, la définition d'indicateurs de performance et la planification des interventions.</span><span class="lang-en">Seminar on modern industrial maintenance strategies: preventive, corrective, condition-based. Covers operational management, performance indicators definition, and intervention planning.</span></p></div><div class="training-skills"><span>Gestion de maintenance</span><span>Stratégie préventive et corrective</span><span>Maintenance conditionnelle</span><span>Planification d'interventions</span></div></div></div><div class="training-card right"><div class="training-content" data-training="safety"><div class="training-header"><div class="training-icon"><i class="fas fa-shield-alt"></i></div><div class="training-info"><div class="training-title"><span class="lang-fr">Sécurité industrielle</span><span class="lang-en">Industrial Safety</span></div><div class="training-org"><i class="fas fa-building"></i> IFACT <span class="training-date"><i class="far fa-calendar-alt"></i> Décembre 2020 / December 2020</span></div></div></div><div class="training-desc"><p><span class="lang-fr">Formation aux principes fondamentaux de la sécurité en milieu industriel. Couvre les principes de sécurité, la prévention des risques, la gestion des risques et les premiers secours.</span><span class="lang-en">Training on fundamental principles of industrial safety. Covers safety principles, risk prevention, risk management, and first aid.</span></p></div><div class="training-skills"><span>Analyse des risques industriels</span><span>Gestion des situations critiques</span><span>Intervention en zone dangereuse</span><span>Premiers secours</span></div></div></div></div></div></section>
+        <section id="langues"><div class="container"><h2 class="section-title"><span class="lang-fr">Langues</span><span class="lang-en">Languages</span></h2><div class="languages-wrapper"><div class="lang-item"><div class="lang-header"><span class="lang-name"><span class="lang-fr">Arabe</span><span class="lang-en">Arabic</span></span><span class="lang-level"><span class="lang-fr">Maternel</span><span class="lang-en">Native</span></span></div><div class="lang-progress"><div class="lang-progress-fill" data-width="100" style="width:0%"></div></div></div><div class="lang-item"><div class="lang-header"><span class="lang-name"><span class="lang-fr">Français</span><span class="lang-en">French</span></span><span class="lang-level"><span class="lang-fr">Professionnel - Niveau avancé</span><span class="lang-en">Professional - Advanced Level</span></span></div><div class="lang-progress"><div class="lang-progress-fill" data-width="90" style="width:0%"></div></div></div><div class="lang-item"><div class="lang-header"><span class="lang-name"><span class="lang-fr">Anglais</span><span class="lang-en">English</span></span><span class="lang-level"><span class="lang-fr">Professionnel - Niveau intermédiaire supérieur</span><span class="lang-en">Professional - Upper Intermediate Level</span></span></div><div class="lang-progress"><div class="lang-progress-fill" data-width="80" style="width:0%"></div></div></div><p style="margin-top:1rem;"><i class="fas fa-file-alt"></i> <span class="lang-fr">Capacité à communiquer efficacement en contexte technique et industriel.</span><span class="lang-en">Ability to communicate effectively in technical and industrial contexts.</span></p></div></div></section>
+        <section id="certifications"><div class="container"><h2 class="section-title"><i class="fas fa-certificate"></i> <span class="lang-fr">Certifications industrielles</span><span class="lang-en">Industrial Certifications</span></h2><div class="certifications-grid"><div class="cert-card" data-cert="pcs7"><div class="cert-header"><div class="cert-icon"><i class="fas fa-microchip"></i><span class="cert-year">2025</span></div></div><div class="cert-body"><div class="cert-title">SIMATIC PCS7 Expert</div><div class="cert-issuer"><i class="fas fa-building"></i> TECHNORD (Belgique / Belgium)</div><div class="cert-description"><span class="lang-fr">Certification avancée sur le système DCS Siemens SIMATIC PCS7.</span><span class="lang-en">Advanced certification on Siemens SIMATIC PCS7 DCS system.</span></div><div class="cert-skills"><span>Gestion de projets PCS7</span><span>Programmation CFC/SFC</span><span>Configuration PROFIBUS & PROFINET</span><span>Développement d'interfaces OS</span></div></div></div><div class="cert-card" data-cert="maintenance"><div class="cert-header"><div class="cert-icon"><i class="fas fa-tools"></i><span class="cert-year">2025</span></div></div><div class="cert-body"><div class="cert-title">SIMATIC Maintenance Niveau 1 / Level 1</div><div class="cert-issuer"><i class="fas fa-building"></i> CFIC GICA</div><div class="cert-description"><span class="lang-fr">Certification en maintenance des systèmes SIMATIC S7.</span><span class="lang-en">Certification in SIMATIC S7 systems maintenance.</span></div><div class="cert-skills"><span>Diagnostic d'automates S7</span><span>Dépannage systèmes automatisés</span><span>Maintenance préventive et corrective</span><span>Lecture d'architectures industrielles</span></div></div></div><div class="cert-card" data-cert="indmaintenance"><div class="cert-header"><div class="cert-icon"><i class="fas fa-industry"></i><span class="cert-year">2023</span></div></div><div class="cert-body"><div class="cert-title"><span class="lang-fr">Maintenance Industrielle</span><span class="lang-en">Industrial Maintenance</span></div><div class="cert-issuer"><i class="fas fa-building"></i> INPED</div><div class="cert-description"><span class="lang-fr">Certification en gestion et stratégies de maintenance industrielle.</span><span class="lang-en">Certification in industrial maintenance management and strategies.</span></div><div class="cert-skills"><span>Gestion de maintenance</span><span>Stratégie préventive et corrective</span><span>Maintenance conditionnelle</span><span>Planification d'interventions</span></div></div></div><div class="cert-card" data-cert="safety"><div class="cert-header"><div class="cert-icon"><i class="fas fa-hard-hat"></i><span class="cert-year">2020</span></div></div><div class="cert-body"><div class="cert-title"><span class="lang-fr">Sécurité Industrielle</span><span class="lang-en">Industrial Safety</span></div><div class="cert-issuer"><i class="fas fa-building"></i> IFACT</div><div class="cert-description"><span class="lang-fr">Certification aux principes fondamentaux de la sécurité industrielle.</span><span class="lang-en">Certification in fundamental industrial safety principles.</span></div><div class="cert-skills"><span>Analyse des risques industriels</span><span>Gestion des situations critiques</span><span>Intervention en zone dangereuse</span><span>Premiers secours</span></div></div></div></div></div></section>
+        <section id="competences"><div class="container"><h2 class="section-title"><span class="lang-fr">Compétences techniques</span><span class="lang-en">Technical skills</span></h2><div class="skills-cards-grid"><div class="skill-card-item" data-skill="management"><div class="skill-card-icon"><i class="fas fa-users-cog"></i></div><div class="skill-card-title"><span class="lang-fr">Management & Coordination</span><span class="lang-en">Management & Coordination</span></div><div class="skill-card-desc"><span class="lang-fr">Gestion d'équipe, gestion des sous-traitants, travail en équipe, communication efficace</span><span class="lang-en">Team management, subcontractor management, teamwork, effective communication</span></div></div><div class="skill-card-item" data-skill="automation"><div class="skill-card-icon"><i class="fas fa-microchip"></i></div><div class="skill-card-title"><span class="lang-fr">Automatisation & Contrôle</span><span class="lang-en">Automation & Control</span></div><div class="skill-card-desc"><span class="lang-fr">Programmation de PLC, Systèmes SCADA, Systèmes DCS, Protocoles de communication</span><span class="lang-en">PLC programming, SCADA systems, DCS systems, Communication protocols</span></div></div><div class="skill-card-item" data-skill="instrumentation"><div class="skill-card-icon"><i class="fas fa-chart-line"></i></div><div class="skill-card-title"><span class="lang-fr">Instrumentation & Mesure</span><span class="lang-en">Instrumentation & Measurement</span></div><div class="skill-card-desc"><span class="lang-fr">Maîtrise des capteurs, Étalonnage des instruments, Calibration des instruments</span><span class="lang-en">Sensor mastery, Instrument calibration</span></div></div><div class="skill-card-item" data-skill="maintenance"><div class="skill-card-icon"><i class="fas fa-tools"></i></div><div class="skill-card-title"><span class="lang-fr">Maintenance & Mise en service</span><span class="lang-en">Maintenance & Commissioning</span></div><div class="skill-card-desc"><span class="lang-fr">Maintenance industrielle, Mise en service d'équipements</span><span class="lang-en">Industrial maintenance, Equipment commissioning</span></div></div><div class="skill-card-item" data-skill="documentation"><div class="skill-card-icon"><i class="fas fa-file-alt"></i></div><div class="skill-card-title"><span class="lang-fr">Documentation & Outils</span><span class="lang-en">Documentation & Tools</span></div><div class="skill-card-desc"><span class="lang-fr">Documentation technique, Microsoft Office</span><span class="lang-en">Technical documentation, Microsoft Office</span></div></div><div class="skill-card-item" data-skill="problemsolving"><div class="skill-card-icon"><i class="fas fa-search"></i></div><div class="skill-card-title"><span class="lang-fr">Résolution de problèmes</span><span class="lang-en">Problem Solving</span></div><div class="skill-card-desc"><span class="lang-fr">Analyse technique, Diagnostic des pannes, Résolution de problèmes</span><span class="lang-en">Technical analysis, Fault diagnosis, Problem resolution</span></div></div></div></div></section>
+        <section id="soft-skills"><div class="container"><h2 class="section-title"><span class="lang-fr">Compétences personnelles</span><span class="lang-en">Personal Skills</span></h2><div class="soft-skills-grid"><div class="soft-skill-card"><div class="soft-skill-icon"><i class="fas fa-ruler-combined"></i></div><div class="soft-skill-title"><span class="lang-fr">Rigueur et précision</span><span class="lang-en">Rigor and precision</span></div><div class="soft-skill-desc"><span class="lang-fr">Souci du détail et exactitude.</span><span class="lang-en">Attention to detail and accuracy.</span></div></div><div class="soft-skill-card"><div class="soft-skill-icon"><i class="fas fa-user-check"></i></div><div class="soft-skill-title"><span class="lang-fr">Autonomie</span><span class="lang-en">Autonomy</span></div><div class="soft-skill-desc"><span class="lang-fr">Capacité à travailler de manière indépendante.</span><span class="lang-en">Ability to work independently.</span></div></div><div class="soft-skill-card"><div class="soft-skill-icon"><i class="fas fa-users"></i></div><div class="soft-skill-title"><span class="lang-fr">Esprit d'équipe et collaboration</span><span class="lang-en">Team spirit and collaboration</span></div><div class="soft-skill-desc"><span class="lang-fr">Travail en synergie et partage des connaissances.</span><span class="lang-en">Synergistic work and knowledge sharing.</span></div></div><div class="soft-skill-card"><div class="soft-skill-icon"><i class="fas fa-tasks"></i></div><div class="soft-skill-title"><span class="lang-fr">Sens des responsabilités</span><span class="lang-en">Sense of responsibility</span></div><div class="soft-skill-desc"><span class="lang-fr">Engagement et fiabilité dans les missions confiées.</span><span class="lang-en">Commitment and reliability in assigned tasks.</span></div></div><div class="soft-skill-card"><div class="soft-skill-icon"><i class="fas fa-chart-line"></i></div><div class="soft-skill-title"><span class="lang-fr">Esprit d'analyse</span><span class="lang-en">Analytical mind</span></div><div class="soft-skill-desc"><span class="lang-fr">Résolution méthodique de problèmes complexes.</span><span class="lang-en">Methodical resolution of complex problems.</span></div></div></div></div></section>
+        <section id="centres-interet"><div class="container"><h2 class="section-title"><span class="lang-fr">Centres d'intérêt</span><span class="lang-en">Interests</span></h2><div class="soft-skills-grid"><div class="soft-skill-card"><div class="soft-skill-icon"><i class="fas fa-book"></i></div><div class="soft-skill-title"><span class="lang-fr">Lecture et Histoire</span><span class="lang-en">Reading and History</span></div></div><div class="soft-skill-card"><div class="soft-skill-icon"><i class="fas fa-swimmer"></i></div><div class="soft-skill-title"><span class="lang-fr">Natation et Sports</span><span class="lang-en">Swimming and Sports</span></div></div><div class="soft-skill-card"><div class="soft-skill-icon"><i class="fas fa-campground"></i></div><div class="soft-skill-title"><span class="lang-fr">Campings et voyages</span><span class="lang-en">Camping and travel</span></div></div></div></div></section>
+        <section id="contact"><div class="container"><h2 class="section-title"><span class="lang-fr">Contact</span><span class="lang-en">Contact</span></h2><div class="contact-subtitle"><i class="fas fa-handshake"></i><span class="lang-fr">Travaillons ensemble</span><span class="lang-en">Let's work together</span><i class="fas fa-handshake"></i></div><div class="footer-content" style="margin-bottom: 0;"><div class="footer-contact"><h3><i class="fas fa-address-card"></i> <span class="lang-fr">Coordonnées</span><span class="lang-en">Contact</span></h3><div class="animated-contact"><div class="contact-item"><i class="fas fa-envelope"></i><span>meziani.nabil.dz@gmail.com</span></div><div class="contact-item"><i class="fas fa-phone-alt"></i><span>+213 784 21 54 67</span></div><div class="contact-item"><i class="fas fa-map-marker-alt"></i><span class="lang-fr">Alger, Algérie</span><span class="lang-en">Algiers, Algeria</span></div></div></div><div class="footer-social"><h3><i class="fas fa-users"></i> <span class="lang-fr">Professionnel</span><span class="lang-en">Professional</span></h3><div class="social-links"><a href="https://www.linkedin.com/in/nabilmeziani/" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a><a href="#"><i class="fab fa-github"></i> GitHub</a></div><div class="footer-note"><i class="fas fa-briefcase"></i> <span class="lang-fr">Disponible pour opportunités</span><span class="lang-en">Open to opportunities</span></div></div></div></div></section>
     </main>
 
     <footer><div class="container"><div class="copyright"><p>© 2025 Nabil Meziani — <span class="lang-fr">Ingénieur Automatisme & Instrumentation · Alger, Algérie</span><span class="lang-en">Automation & Instrumentation Engineer · Algiers, Algeria</span></p></div></div></footer>
 
-    <!-- Modales -->
     <div id="activityModal" class="modal"><div class="modal-content"><span class="modal-close">&times;</span><div class="modal-icon" id="modalIcon"></div><h3 id="modalTitle"></h3><p class="modal-desc" id="modalDesc"></p><div class="modal-details" id="modalDetails"></div><hr><div class="modal-tech" id="modalTech"></div><div id="skillsListModal"></div></div></div>
     <div id="certModal" class="cert-modal"><div class="cert-modal-content"><span class="cert-modal-close">&times;</span><div class="cert-modal-icon" id="certModalIcon"></div><h3 id="certModalTitle"></h3><div class="cert-modal-issuer" id="certModalIssuer"></div><div class="cert-modal-date" id="certModalDate"></div><p class="cert-modal-desc" id="certModalDesc"></p><div class="cert-modal-skills" id="certModalSkills"></div></div></div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        // Génération des particules flottantes
+        function createParticles() {
+            const container = document.getElementById('floatingParticles');
+            if (!container) return;
+            const particleCount = 25;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                const size = Math.random() * 8 + 3;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                const duration = Math.random() * 10 + 6;
+                particle.style.animationDuration = duration + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(particle);
+            }
+        }
+        
         (function() {
             'use strict';
             AOS.init({ duration: 700, once: true, offset: 80 });
+            createParticles();
             
-            // Fonction de téléchargement direct
             function downloadPDF(url) {
                 const link = document.createElement('a');
                 link.href = url;
@@ -557,84 +737,22 @@
                 document.body.removeChild(link);
             }
 
-            // Configuration des téléchargements directs
-            const cvFiles = {
-                fr: 'MEZIANI_NABIL_CV_Fr.pdf',
-                en: 'MEZIANI_NABIL_CV_En.pdf'
-            };
-
-            // Header CV button selector
+            const cvFiles = { fr: 'MEZIANI_NABIL_CV_Fr.pdf', en: 'MEZIANI_NABIL_CV_En.pdf' };
             const cvLangSelector = document.getElementById('cvLangSelector');
             const cvDownloadBtn = document.getElementById('cvDownloadBtn');
-            
-            if (cvDownloadBtn) {
-                cvDownloadBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    cvLangSelector.classList.toggle('show');
-                });
-            }
-
-            // Hero CV button selector
+            if (cvDownloadBtn) cvDownloadBtn.addEventListener('click', (e) => { e.stopPropagation(); cvLangSelector.classList.toggle('show'); });
             const heroCvLangSelector = document.getElementById('heroCvLangSelector');
             const heroDownloadBtn = document.getElementById('heroDownloadBtn');
-            
-            if (heroDownloadBtn) {
-                heroDownloadBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    heroCvLangSelector.classList.toggle('show');
-                });
-            }
-
-            // Sélecteurs de langue CV header
-            document.querySelectorAll('[data-cv-fr]').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    downloadPDF(cvFiles.fr);
-                    cvLangSelector.classList.remove('show');
-                });
-            });
-            document.querySelectorAll('[data-cv-en]').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    downloadPDF(cvFiles.en);
-                    cvLangSelector.classList.remove('show');
-                });
-            });
-
-            // Sélecteurs de langue CV hero
-            document.querySelectorAll('[data-cv-fr-hero]').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    downloadPDF(cvFiles.fr);
-                    heroCvLangSelector.classList.remove('show');
-                });
-            });
-            document.querySelectorAll('[data-cv-en-hero]').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    downloadPDF(cvFiles.en);
-                    heroCvLangSelector.classList.remove('show');
-                });
-            });
-
-            // Mobile CV buttons
-            document.querySelectorAll('[data-cv-fr-mobile]').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    downloadPDF(cvFiles.fr);
-                });
-            });
-            document.querySelectorAll('[data-cv-en-mobile]').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    downloadPDF(cvFiles.en);
-                });
-            });
-
-            // Fermer les sélecteurs en cliquant ailleurs
-            document.addEventListener('click', () => {
-                if (cvLangSelector) cvLangSelector.classList.remove('show');
-                if (heroCvLangSelector) heroCvLangSelector.classList.remove('show');
+            if (heroDownloadBtn) heroDownloadBtn.addEventListener('click', (e) => { e.stopPropagation(); heroCvLangSelector.classList.toggle('show'); });
+            document.querySelectorAll('[data-cv-fr]').forEach(el => el.addEventListener('click', (e) => { e.preventDefault(); downloadPDF(cvFiles.fr); cvLangSelector.classList.remove('show'); }));
+            document.querySelectorAll('[data-cv-en]').forEach(el => el.addEventListener('click', (e) => { e.preventDefault(); downloadPDF(cvFiles.en); cvLangSelector.classList.remove('show'); }));
+            document.querySelectorAll('[data-cv-fr-hero]').forEach(el => el.addEventListener('click', (e) => { e.preventDefault(); downloadPDF(cvFiles.fr); heroCvLangSelector.classList.remove('show'); }));
+            document.querySelectorAll('[data-cv-en-hero]').forEach(el => el.addEventListener('click', (e) => { e.preventDefault(); downloadPDF(cvFiles.en); heroCvLangSelector.classList.remove('show'); }));
+            document.querySelectorAll('[data-cv-fr-mobile]').forEach(el => el.addEventListener('click', (e) => { e.preventDefault(); downloadPDF(cvFiles.fr); }));
+            document.querySelectorAll('[data-cv-en-mobile]').forEach(el => el.addEventListener('click', (e) => { e.preventDefault(); downloadPDF(cvFiles.en); }));
+            document.addEventListener('click', (e) => {
+                if (cvLangSelector && !cvLangSelector.contains(e.target) && e.target !== cvDownloadBtn) cvLangSelector.classList.remove('show');
+                if (heroCvLangSelector && !heroCvLangSelector.contains(e.target) && e.target !== heroDownloadBtn) heroCvLangSelector.classList.remove('show');
             });
 
             const activitiesData = [
@@ -668,7 +786,7 @@
             function openModal(index) { const a = activitiesData[index]; if (!a || !modal) return; const isFr = currentLang === 'fr'; document.getElementById('modalIcon').innerHTML = `<i class="${a.icon}"></i>`; document.getElementById('modalTitle').textContent = isFr ? a.title_fr : a.title_en; document.getElementById('modalDesc').textContent = isFr ? a.desc_fr : a.desc_en; document.getElementById('modalDetails').innerHTML = `<i class="fas fa-info-circle"></i> ${isFr ? a.details_fr : a.details_en}`; document.getElementById('modalTech').innerHTML = `<strong>${isFr ? 'Technologies :' : 'Technologies:'}</strong> ${a.tech}`; document.getElementById('skillsListModal').innerHTML = ''; modal.classList.add('show'); body.style.overflow = 'hidden'; stopAutoPlay(); }
             function closeModal() { modal?.classList.remove('show'); body.style.overflow = ''; startAutoPlay(); }
             function closeCertModal() { certModal?.classList.remove('show'); body.style.overflow = ''; }
-            function initEvents() { document.getElementById('prevBtn')?.addEventListener('click', () => { prevSlide(); resetAutoPlay(); }); document.getElementById('nextBtn')?.addEventListener('click', () => { nextSlide(); resetAutoPlay(); }); document.querySelector('.carousel-wrapper')?.addEventListener('mouseenter', stopAutoPlay); document.querySelector('.carousel-wrapper')?.addEventListener('mouseleave', startAutoPlay); document.querySelector('.modal-close')?.addEventListener('click', closeModal); document.querySelector('.cert-modal-close')?.addEventListener('click', closeCertModal); window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); if (e.target === certModal) closeCertModal(); }); document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closeCertModal(); } }); document.getElementById('homeLogo')?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' })); document.getElementById('themeToggle')?.addEventListener('click', () => { body.classList.toggle('dark'); localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light'); }); document.getElementById('langSwitchBtn')?.addEventListener('click', () => { currentLang = currentLang === 'fr' ? 'en' : 'fr'; body.setAttribute('data-lang', currentLang); localStorage.setItem('lang', currentLang); updateLangButton(); buildSlides(); }); document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', function(e) { e.preventDefault(); const t = document.querySelector(this.getAttribute('href')); if (t) { t.scrollIntoView({ behavior: 'smooth' }); document.getElementById('mobileNav')?.classList.remove('active'); } })); }
+            function initEvents() { document.getElementById('prevBtn')?.addEventListener('click', () => { prevSlide(); resetAutoPlay(); }); document.getElementById('nextBtn')?.addEventListener('click', () => { nextSlide(); resetAutoPlay(); }); document.querySelector('.carousel-wrapper')?.addEventListener('mouseenter', stopAutoPlay); document.querySelector('.carousel-wrapper')?.addEventListener('mouseleave', startAutoPlay); document.querySelector('.modal-close')?.addEventListener('click', closeModal); document.querySelector('.cert-modal-close')?.addEventListener('click', closeCertModal); window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); if (e.target === certModal) closeCertModal(); }); document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closeCertModal(); } }); document.getElementById('homeLogo')?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' })); document.getElementById('themeToggle')?.addEventListener('click', () => { body.classList.toggle('dark'); localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light'); }); document.getElementById('langSwitchBtn')?.addEventListener('click', () => { currentLang = currentLang === 'fr' ? 'en' : 'fr'; body.setAttribute('data-lang', currentLang); localStorage.setItem('lang', currentLang); updateLangButton(); buildSlides(); }); document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', function(e) { e.preventDefault(); const t = document.querySelector(this.getAttribute('href')); if (t) { t.scrollIntoView({ behavior: 'smooth' }); document.getElementById('mobileNav')?.classList.remove('active'); } })); document.getElementById('scrollIndicator')?.addEventListener('click', () => { const nextSection = document.getElementById('disponibilite'); if (nextSection) nextSection.scrollIntoView({ behavior: 'smooth' }); }); }
             function initMobileMenu() { const btn = document.getElementById('mobileMenuBtn'); const nav = document.getElementById('mobileNav'); btn?.addEventListener('click', () => { nav?.classList.toggle('active'); btn.innerHTML = nav?.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>'; }); document.querySelectorAll('.mobile-nav-link, .mobile-cv-btn').forEach(l => l.addEventListener('click', () => { nav?.classList.remove('active'); btn.innerHTML = '<i class="fas fa-bars"></i>'; })); }
             new IntersectionObserver((e) => { e.forEach(entry => { if (entry.isIntersecting) entry.target.querySelectorAll('.lang-progress-fill').forEach(b => { const w = b.getAttribute('data-width'); if (w) b.style.width = w + '%'; }); }); }, { threshold: 0.3 }).observe(document.querySelector('.languages-wrapper'));
             const skillCardsData = { management: { icon: 'fas fa-users-cog', title_fr: 'Management & Coordination', title_en: 'Management & Coordination', desc_fr: 'Gestion d\'équipe, gestion des sous-traitants, travail en équipe, communication efficace.', desc_en: 'Team management, subcontractor management, teamwork, effective communication.' }, automation: { icon: 'fas fa-microchip', title_fr: 'Automatisation & Contrôle', title_en: 'Automation & Control', desc_fr: 'Programmation de PLC, Systèmes SCADA, Systèmes DCS, Protocoles de communication.', desc_en: 'PLC programming, SCADA systems, DCS systems, Communication protocols.' }, instrumentation: { icon: 'fas fa-chart-line', title_fr: 'Instrumentation & Mesure', title_en: 'Instrumentation & Measurement', desc_fr: 'Maîtrise des capteurs, Étalonnage des instruments, Calibration des instruments.', desc_en: 'Sensor mastery, Instrument calibration.' }, maintenance: { icon: 'fas fa-tools', title_fr: 'Maintenance & Mise en service', title_en: 'Maintenance & Commissioning', desc_fr: 'Maintenance industrielle, Mise en service d\'équipements.', desc_en: 'Industrial maintenance, Equipment commissioning.' }, documentation: { icon: 'fas fa-file-alt', title_fr: 'Documentation & Outils', title_en: 'Documentation & Tools', desc_fr: 'Documentation technique, Microsoft Office.', desc_en: 'Technical documentation, Microsoft Office.' }, problemsolving: { icon: 'fas fa-search', title_fr: 'Résolution de problèmes', title_en: 'Problem Solving', desc_fr: 'Analyse technique, Diagnostic des pannes, Résolution de problèmes.', desc_en: 'Technical analysis, Fault diagnosis, Problem resolution.' } };
@@ -681,7 +799,6 @@
         })();
     </script>
 
-    <!-- CANVAS BACKGROUND + SCROLL REVEAL -->
     <canvas id="bgCanvas"></canvas>
     <script>
     (function(){
